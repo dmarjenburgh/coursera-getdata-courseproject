@@ -12,7 +12,6 @@
 ##############################################
 
 ## Setup
-setwd("~/Coursera/DataScience/getdata/week3/courseProject/UCI HAR Dataset")
 if (!file.exists("features.txt"))
     stop("The required file features.txt was not found.",
          "Please ensure your working directory is set to the unzipped raw dataset folder.")
@@ -22,40 +21,45 @@ library(dplyr); library(tidyr)
 datagroups = c("test", "train")
 
 ## Load features
-# Take features measuring a mean or standard deviation.
+# Take only features measuring a mean or standard deviation.
 features <- read.table("features.txt", col.names = c("ID", "Name")) %>%
-            filter(grepl("-(mean|std)\\(\\)", Name)) %>%
-            tbl_df
+    filter(grepl("-(mean|std)\\(\\)", Name)) %>%
+    tbl_df
 
 # Load subject data
 subject <- lapply(datagroups, function (group) {
     filename <- paste(group, "/subject_", group, ".txt", sep = "")
     read.table(filename, col.names = "SubjectID") %>%
-    mutate(Group = group)
+        mutate(Group = group)
 }) %>% bind_rows %>% tbl_df
 
 # Load activity
+# 3. Use descriptive activity names to name the activities in the data set
 act_labels <- read.table("activity_labels.txt", col.names = c("ID", "Activity"))
 act <- lapply(datagroups, function (group) {
     filename <- paste(group, "/y_", group, ".txt", sep = "")
     read.table(filename, col.names = "Activity.ID")
-}) %>%
-    bind_rows %>%
-    inner_join(act_labels, by = c("Activity.ID" = "ID"))
+}) %>% bind_rows %>% inner_join(act_labels, by = c("Activity.ID" = "ID"))
 
-# Load values
+# 1. Merge the training and the test sets to create one data set.
+# 2. Extract only the measurements on the mean and standard deviation for each measurement.
 measurements <- lapply(datagroups, function (group) {
     filename <- paste(group, "/X_", group, ".txt", sep = "")
     read.table(filename) %>% select(features$ID)
 }) %>% bind_rows
-# Assign colNames. Remove the '()' for readability
-names(measurements2) <- sub("\\(\\)", "", features$Name)
+
+# 4. Appropriately label the data set with descriptive variable names.
+names(measurements) <- features$Name %>%
+    sub("-mean\\(\\)", "Mean", .) %>% # remove ()
+    sub("-std\\(\\)", "StdDev", .) %>%
+    sub("^t", "Time", .) %>%
+    sub("^f", "Frequency", .) %>%
+    sub("BodyBody", "Body", .)
 
 # Bind variables together
-wide_data <- bind_cols(subject["SubjectID"], act["Activity"], measurements) %>%
-             tbl_df
+wide_data <- tbl_df(bind_cols(subject["SubjectID"], act["Activity"], measurements))
 thin_data <- gather(wide_data, Feature, Value, -SubjectID, -Activity) %>%
-             group_by(SubjectID, Activity, Feature)
+    group_by(SubjectID, Activity, Feature)
 summary <- summarise(thin_data, Average = mean(Value))
 
 # Write output
