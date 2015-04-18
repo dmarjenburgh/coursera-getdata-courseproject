@@ -55,3 +55,7 @@ wide_data <- bind_cols(subject["SubjectID"], act["Activity"], measurements) %>%
 thin_data <- gather(wide_data, Feature, Value, -SubjectID, -Activity) %>%
              group_by(SubjectID, Activity, Feature)
 summary <- summarise(thin_data, Average = mean(Value))
+
+# Write output
+write.csv("tidy.csv", thin_data, row.names = FALSE)
+write.csv("summary.csv", summary, row.names = FALSE)
