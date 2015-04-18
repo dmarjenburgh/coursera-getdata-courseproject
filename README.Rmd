@@ -14,6 +14,6 @@ directory when sourced, provided the raw dataset can be found:
 - [tidy.csv](tidy.csv)
 - [summary.csv](summary.csv)
 
-The [codebook](codeBook.md) contains information on the output files `tidy.csv`
+The [codebook](codeBook.Rmd) contains information on the output files `tidy.csv`
 and `summary.csv`, as well as description of the variable names and where they
 come from.
