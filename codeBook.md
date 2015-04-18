@@ -47,7 +47,7 @@ features on every line. Which feature belongs to which column is listed in
 
 Identifying the variables
 -------------------------
-Our output will be a [molten dataset](http://vita.had.co.nz/papers/tidy-data.pdf)
+Our output `tidy.csv` will be a [molten dataset](http://vita.had.co.nz/papers/tidy-data.pdf)
 containing the following 4 variables:
 
 1. `SubjectID` - The unique numeric identifier for the subject performing the activity.
@@ -56,17 +56,21 @@ containing the following 4 variables:
                 activities described in `activity_labels.txt`, see above.
 3. `Feature` - A factor variables for each of the feature we want the value of.
                (e.g. tBodyAcc-mean-X). See futher description below.
-4. `Value` - The actual numeric value of the measures feature.
+4. `Value` - The measured value.
 
 There are 33 attributes in the raw dataset. We only take 2 of the 17 calculated
 values: the mean and the standard deviation of each. This is gives 66 Features.
 Therefore, our output dataset will have (2947 + 7352)*66 = 679,734 rows.
 
-The `Feature` variable is taken from the raw dataset. The measurements of the
-mean and standard deviation contain `-mean()` and `-std()` in their names. For
-readability we have removed the parenthesis. Otherwise the name is left unchanged.
+The `Feature` variable is a factor variable whose values lie in a subset of the
+feature list in the raw dataset. We only take the features measuring the mean or
+standard deviation. These features contain `-mean()` or `-std()` in their names.
+For readability we have removed the parenthesis, but otherwise the name has been
+left unchanged.
+
 If a Feature begins with a `t`, it represents a measurement in the time-domain,
 if it begins with an `f`, it represents a measurement in the frequency-domain.
+
 The Feature column could have been separated out further into multiple columns
 denoting the Domain (Time or Frequency) and Statistic (Mean or StdDev), but we
 have not done so as it was not needed for our analysis.
@@ -76,4 +80,4 @@ Summarized dataset
 From the tidy data created, we create a summary containing the average value of
 each variable for each subject and activity. The number of rows in this summary
 is `num_subjects * num_activities * num_features` rows, or 
-30 \times 6 \times 66 = 11880 rows.
+30 \times 6 \times 66 = 11880 rows. This data is in the file `summary.csv`.
