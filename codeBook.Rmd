@@ -63,12 +63,18 @@ Therefore, our output dataset will have (2947 + 7352)*66 = 679,734 rows.
 
 The `Feature` variable is a factor variable whose values lie in a subset of the
 feature list in the raw dataset. We only take the features measuring the mean or
-standard deviation. These features contain `-mean()` or `-std()` in their names.
-For readability we have removed the parenthesis, but otherwise the name has been
-left unchanged.
+standard deviation. These feature names were renamed from the raw names by the
+following steps:
 
-If a Feature begins with a `t`, it represents a measurement in the time-domain,
-if it begins with an `f`, it represents a measurement in the frequency-domain.
+- `-mean()` has been replaced with `Mean`
+- `-std()` has been replaced with `StdDev`
+- A starting `t` has been replaced with `Time`
+- A starting `f` has been replaced with `Frequency`
+- The names with `BodyBody` are typo's (as is clear from `features_info.txt`)
+  and have been replaces with `Body`
+
+If a Feature begins with a `Time`, it represents a measurement in the time-domain,
+if it begins with an `Frequency`, it represents a measurement in the frequency-domain.
 
 The Feature column could have been separated out further into multiple columns
 denoting the Domain (Time or Frequency) and Statistic (Mean or StdDev), but we
@@ -79,4 +85,4 @@ Summarized dataset
 From the tidy data created, we create a summary containing the average value of
 each variable for each subject and activity. The number of rows in this summary
 is `num_subjects * num_activities * num_features` rows, or 
-30 \times 6 \times 66 = 11880 rows. This data is in the file `summary.csv`.
+30 * 6 * 66 = 11880 rows. This data is in the file `summary.csv`.
