@@ -1,53 +1,55 @@
-## Setup
+##############################################
+# This script will perform the following steps
+#
+# 1. Merge the training and the test sets to create one data set.
+# 2. Extract only the measurements on the mean and standard deviation for each measurement.
+# 3. Use descriptive activity names to name the activities in the data set
+# 4. Appropriately label the data set with descriptive variable names.
+# 5. Create a second, independent tidy data set with the average of each variable for each activity and each subject.
+#
+# For more information, see:
+# https://github.com/dmarjenburgh/coursera-getdata-courseproject
+##############################################
 
-rm(list=ls()) # Clear the Global Environment
+## Setup
 setwd("~/Coursera/DataScience/getdata/week3/courseProject/UCI HAR Dataset")
+if (!file.exists("features.txt"))
+    stop("The required file features.txt was not found.",
+         "Please ensure your working directory is set to the unzipped raw dataset folder.")
 library(dplyr); library(tidyr)
+
+## Constants
+datagroups = c("test", "train")
 
 ## Load features
 # Take features measuring a mean or standard deviation.
-features <- read.csv("features.txt",
-                     header = FALSE,
-                     sep = "",
-                     col.names = c("ID", "Name")) %>%
+features <- read.table("features.txt", col.names = c("ID", "Name")) %>%
             filter(grepl("-(mean|std)\\(\\)", Name)) %>%
             tbl_df
 
 # Load subject data
-subject_test <- read.csv("test/subject_test.txt",
-                         header = FALSE,
-                         col.names = "SubjectID") %>%
-                mutate(Group = factor("test"))
-subject_train <- read.csv("train/subject_train.txt",
-                          header = FALSE,
-                          col.names = "SubjectID") %>%
-                 mutate(Group = factor("train"))
-subject <- rbind(subject_test, subject_train) %>% tbl_df
+subject <- lapply(datagroups, function (group) {
+    filename <- paste(group, "/subject_", group, ".txt", sep = "")
+    read.table(filename, col.names = "SubjectID") %>%
+    mutate(Group = group)
+}) %>% bind_rows %>% tbl_df
 
 # Load activity
-act_labels <- read.csv("activity_labels.txt",
-                       header = F,
-                       sep = "",
-                       col.names = c("ID", "Activity"))
-act_test <- read.csv("test/y_test.txt",
-                     header = F,
-                     col.names = "Activity.ID")
-act_train <- read.csv("train/y_train.txt",
-                     header = F,
-                     col.names = "Activity.ID")
-act <- inner_join(rbind(act_test, act_train),
-                  act_labels,
-                  by = c("Activity.ID" = "ID")) %>%
-        tbl_df
+act_labels <- read.table("activity_labels.txt", col.names = c("ID", "Activity"))
+act <- lapply(datagroups, function (group) {
+    filename <- paste(group, "/y_", group, ".txt", sep = "")
+    read.table(filename, col.names = "Activity.ID")
+}) %>%
+    bind_rows %>%
+    inner_join(act_labels, by = c("Activity.ID" = "ID"))
 
 # Load values
-val_test <- read.csv("test/X_test.txt", header = FALSE, sep = "") %>%
-            select(features$ID)
-val_train <- read.csv("train/X_train.txt", header = FALSE, sep = "") %>%
-             select(features$ID)
-measurements <- rbind(val_test, val_train) %>% tbl_df
+measurements <- lapply(datagroups, function (group) {
+    filename <- paste(group, "/X_", group, ".txt", sep = "")
+    read.table(filename) %>% select(features$ID)
+}) %>% bind_rows
 # Assign colNames. Remove the '()' for readability
-names(measurements) <- sub("\\(\\)", "", features$Name)
+names(measurements2) <- sub("\\(\\)", "", features$Name)
 
 # Bind variables together
 wide_data <- bind_cols(subject["SubjectID"], act["Activity"], measurements) %>%
