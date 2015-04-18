@@ -35,13 +35,13 @@ Group  | Number of obs. | Number of subjects
 - `y_test_<group>.txt` links the observation with the activityID
 
 Measurements were taken in fixed-width sliding windows of 2.56s with a frequency
-of 50Hz, giving $2.56*50 = 128$ readings/window. Each line in each of the files in
+of 50Hz, giving 2.56*50 = 128 readings/window. Each line in each of the files in
 the `Inertial Signals` folder holds these 128 values. (These files are not used
 directly in our analysis.)
 
 `features-info.txt` explains the 33 attributes that have been measured. For each,
 17 aggregate values are calculated, including the mean and std. This gives
-$33*17 = 516$ features per row. The `X_<group>.txt` files contain each of the 516
+33*17 = 516 features per row. The `X_<group>.txt` files contain each of the 516
 features on every line. Which feature belongs to which column is listed in
 `features.txt`.
 
@@ -60,7 +60,7 @@ containing the following 4 variables:
 
 There are 33 attributes in the raw dataset. We only take 2 of the 17 calculated
 values: the mean and the standard deviation of each. This is gives 66 Features.
-Therefore, our output dataset will have $(2947 + 7352)*66 = 679,734$ rows.
+Therefore, our output dataset will have (2947 + 7352)*66 = 679,734 rows.
 
 The `Feature` variable is taken from the raw dataset. The measurements of the
 mean and standard deviation contain `-mean()` and `-std()` in their names. For
@@ -76,4 +76,4 @@ Summarized dataset
 From the tidy data created, we create a summary containing the average value of
 each variable for each subject and activity. The number of rows in this summary
 is `num_subjects * num_activities * num_features` rows, or 
-$30 \times 6 \times 66 = 11880$ rows.
+30 \times 6 \times 66 = 11880 rows.
