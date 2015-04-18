@@ -57,5 +57,5 @@ thin_data <- gather(wide_data, Feature, Value, -SubjectID, -Activity) %>%
 summary <- summarise(thin_data, Average = mean(Value))
 
 # Write output
-write.csv("tidy.csv", thin_data, row.names = FALSE)
-write.csv("summary.csv", summary, row.names = FALSE)
+write.csv(thin_data, "tidy.csv", row.names = FALSE)
+write.csv(summary, "summary.csv", row.names = FALSE)
