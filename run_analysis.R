@@ -28,7 +28,7 @@ features <- read.table("features.txt", col.names = c("ID", "Name")) %>%
 
 ## Load subjects
 subject <- lapply(datagroups, function (group) {
-    filename <- paste(group, "/subject_", group, ".txt", sep = "")
+    filename <- paste0(group, "/subject_", group, ".txt")
     filename %>% read.table(col.names = "SubjectID") %>% mutate(Group = group)
 }) %>% bind_rows %>% tbl_df
 
@@ -36,7 +36,7 @@ subject <- lapply(datagroups, function (group) {
 # 3. Use descriptive activity names to name the activities in the data set
 act_labels <- read.table("activity_labels.txt", col.names = c("ID", "Activity"))
 act <- lapply(datagroups, function (group) {
-    filename <- paste(group, "/y_", group, ".txt", sep = "")
+    filename <- paste0(group, "/y_", group, ".txt")
     filename %>% read.table(col.names = "Activity.ID")
 }) %>% bind_rows %>% inner_join(act_labels, by = c("Activity.ID" = "ID"))
 
@@ -44,7 +44,7 @@ act <- lapply(datagroups, function (group) {
 # 1. Merge the training and the test sets to create one data set.
 # 2. Extract only the measurements on the mean and standard deviation for each measurement.
 measurements <- lapply(datagroups, function (group) {
-    filename <- paste(group, "/X_", group, ".txt", sep = "")
+    filename <- paste0(group, "/X_", group, ".txt")
     filename %>% read.table %>% select(features$ID)
 }) %>% bind_rows
 
