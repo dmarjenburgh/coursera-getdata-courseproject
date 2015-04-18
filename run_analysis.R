@@ -67,5 +67,5 @@ summary <- thin_data %>%
     summarise(Average = mean(Value))
 
 # Write output
-write.csv(thin_data, "tidy.csv", row.names = FALSE)
-write.csv(summary, "summary.csv", row.names = FALSE)
+write.table(thin_data, "tidy.txt", row.names = FALSE)
+write.table(summary, "summary.txt", row.names = FALSE)

@@ -11,9 +11,9 @@ zipfile. The folder should have a `features.txt` file.
 The [run_analysis.R](run_analysis.R) script will generate two output files in your working
 directory when sourced, provided the raw dataset can be found:
 
-- [tidy.csv](tidy.csv)
-- [summary.csv](summary.csv)
+- [tidy.txt](tidy.txt)
+- [summary.txt](summary.txt)
 
-The [codebook](codeBook.Rmd) contains information on the output files `tidy.csv`
-and `summary.csv`, as well as description of the variable names and where they
+The [codebook](codeBook.Rmd) contains information on the output files `tidy.txt`
+and `summary.txt`, as well as description of the variable names and where they
 come from.

@@ -46,7 +46,7 @@ features on every line. Which feature belongs to which column is listed in
 
 Tidying the dataset
 -------------------------
-Our output `tidy.csv` will be a [molten dataset](http://vita.had.co.nz/papers/tidy-data.pdf)
+Our output `tidy.txt` will be a [molten dataset](http://vita.had.co.nz/papers/tidy-data.pdf)
 containing the following 4 variables:
 
 1. `SubjectID` - The unique numeric identifier for the subject performing the activity.
@@ -84,7 +84,7 @@ Summarized dataset
 ------------------
 From the tidy dataset created, we create a summary containing the average value
 of each variable for each subject and activity. This data is in the file
-`summary.csv`. The variables in the summary are:
+`summary.txt`. The variables in the summary are:
 
 1. `SubjectID`
 2. `Activity`
